@@ -1,6 +1,27 @@
-import { Button, Card, Container, Row, Table } from "react-bootstrap";
+import { Button, Card, Container, Row, Spinner, Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "./redux/store/store";
+import { useEffect } from "react";
+import { userRequest } from "./redux/slices/userSlice";
+import { IUsersList } from "./redux/types/IUsersList";
+import { useNavigate } from "react-router-dom";
 
 const UsersList = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const loading = useSelector<AppState>((state) => state.user.loading);
+  const userData = useSelector<AppState>(
+    (state) => state.user.data
+  ) as IUsersList[];
+
+  useEffect(() => {
+    dispatch(userRequest());
+  }, []);
+
+  const handleEdit = (id: number) => {
+    navigate(`/${id}`);
+  };
+
   return (
     <Container>
       <Row
@@ -45,24 +66,42 @@ const UsersList = () => {
               </tr>
             </thead>
             <tbody style={{ textAlign: "center" }}>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>*****</td>
-                <td
-                  style={{
-                    display: "flex",
-                    gap: "8px",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Button variant="primary">Edit</Button>
-                  <Button variant="danger">Delete</Button>
-                </td>
-              </tr>
+              {loading ? (
+                <tr>
+                  <td colSpan={6}>
+                    <Spinner animation="border" size="sm" /> Loading...
+                  </td>
+                </tr>
+              ) : (
+                userData.map((value) => (
+                  <tr key={value.id}>
+                    <td>{value.id}</td>
+                    <td>{value.firstName}</td>
+                    <td>{value.lastName}</td>
+                    <td>{value.email}</td>
+                    <td>
+                      {value.password.charAt(-1) +
+                        "*".repeat(value.password.length - 1)}
+                    </td>
+                    <td
+                      style={{
+                        display: "flex",
+                        gap: "8px",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Button
+                        variant="primary"
+                        onClick={() => handleEdit(value.id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger">Delete</Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
         </Card>
