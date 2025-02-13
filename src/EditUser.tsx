@@ -1,6 +1,6 @@
 import ControlForm from "./components/ControlForm";
 
-const Register = () => {
+const EditUser = () => {
   return (
     <>
       <ControlForm />
@@ -8,4 +8,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default EditUser;
