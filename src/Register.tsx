@@ -1,6 +1,22 @@
+import React from "react";
 import { Button, Card, Container, Form, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "./redux/store/store";
+import { IRegister } from "./redux/types/IRegister";
 
 const Register = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const loading = useSelector<AppState>((state) => state.register.loading);
+  const data = useSelector<AppState>(
+    (state) => state.register.data
+  ) as IRegister;
+  const user = useSelector<AppState>((state) => state.register.user);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+  };
+
   return (
     <Container>
       <Row
@@ -39,6 +55,7 @@ const Register = () => {
                 type="text"
                 name="firstName"
                 placeholder="Enter First Name"
+                value={data.firstName}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -49,6 +66,7 @@ const Register = () => {
                 type="text"
                 name="lastName"
                 placeholder="Enter Last Name"
+                value={data.lastName}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -59,6 +77,7 @@ const Register = () => {
                 type="email"
                 name="email"
                 placeholder="Enter Email"
+                value={data.email}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -69,6 +88,7 @@ const Register = () => {
                 type="password"
                 name="password"
                 placeholder="Enter Password"
+                value={data.password}
               />
             </Form.Group>
             <Button type="submit" variant="dark" style={{ width: "100%" }}>
