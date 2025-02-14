@@ -45,6 +45,22 @@ const userSlice = createSlice({
       state.userDetails = action.payload;
     },
 
+    singleUserUpdateRequest: (
+      state: IUserInitial,
+      action: PayloadAction<{ userId: number; userDetails: IUsersList }>
+    ) => {
+      state.loading = true;
+      state.userId = action.payload.userId; // Assign userId
+      state.userDetails = action.payload.userDetails; // Assign userDetails
+    },
+    singleUserUpdateSuccess: (
+      state: IUserInitial,
+      action: PayloadAction<IUsersList>
+    ) => {
+      state.loading = false;
+      state.userDetails = action.payload;
+    },
+
     singleUserDelRequest: (
       state: IUserInitial,
       action: PayloadAction<number>
@@ -73,6 +89,8 @@ export const {
   userFailure,
   singleUserRequest,
   singleUserSuccess,
+  singleUserUpdateRequest,
+  singleUserUpdateSuccess,
   singleUserDelRequest,
   singleUserDelSuccess,
 } = userSlice.actions;

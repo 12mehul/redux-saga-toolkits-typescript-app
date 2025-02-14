@@ -12,11 +12,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../redux/store/store";
 import { IRegister } from "../redux/types/IRegister";
 import { regRequest, regUpdate } from "../redux/slices/registerSlice";
-import { singleUserRequest } from "../redux/slices/userSlice";
+import {
+  singleUserRequest,
+  singleUserUpdateRequest,
+} from "../redux/slices/userSlice";
 import { IUsersList } from "../redux/types/IUsersList";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ControlForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams();
   const [error, setError] = useState<IRegister>({
@@ -26,9 +30,7 @@ const ControlForm = () => {
     password: "",
   });
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [userId, setUserId] = useState<number | null>(
-    id ? parseInt(id, 10) : null
-  );
+  const userId = Number(id);
 
   const loading = useSelector<AppState>(
     (state) => state.register.loading
@@ -77,7 +79,17 @@ const ControlForm = () => {
 
     if (loading) return; // Prevent form submission if already loading
     if (validateFrom()) {
-      dispatch(regRequest(data));
+      if (userId) {
+        dispatch(
+          singleUserUpdateRequest({
+            userId,
+            userDetails: { ...data, id: userId },
+          })
+        );
+        setTimeout(() => navigate("/lists"), 3000);
+      } else {
+        dispatch(regRequest(data));
+      }
     }
   };
 

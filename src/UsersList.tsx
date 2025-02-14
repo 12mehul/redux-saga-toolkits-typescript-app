@@ -82,7 +82,7 @@ const UsersList = () => {
           {successMessage && <Alert variant="success">{successMessage}</Alert>}
           <Card
             style={{
-              width: "56rem",
+              maxWidth: "56rem",
               padding: "12px 26px",
               border: "1px solid grey",
               borderRadius: "25px",

@@ -3,6 +3,7 @@ import { watcherRegister } from "./registerSaga";
 import {
   watcherSingleUserDel,
   watcherSingleUserList,
+  watcherSingleUserUpdate,
   watcherUserList,
 } from "./userSaga";
 
@@ -11,6 +12,7 @@ export default function* rootSagas() {
     watcherRegister(),
     watcherUserList(),
     watcherSingleUserList(),
+    watcherSingleUserUpdate(),
     watcherSingleUserDel(),
   ]);
 }
