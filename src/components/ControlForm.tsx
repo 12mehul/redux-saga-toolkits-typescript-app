@@ -133,7 +133,7 @@ const ControlForm = () => {
               color: "#30368b",
             }}
           >
-            Register
+            {userId ? "Update User" : "Register"}
           </Card.Body>
           {successMessage && <Alert variant="success">{successMessage}</Alert>}
           <Form onSubmit={handleSubmit}>
