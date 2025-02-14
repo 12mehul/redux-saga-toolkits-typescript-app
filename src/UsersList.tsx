@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Button,
   Card,
@@ -22,10 +23,14 @@ const UsersList = () => {
   const [page, setPage] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);
   const [userId, setUserId] = useState<number>(0);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const loading = useSelector<AppState>((state) => state.user.loading);
   const userData = useSelector<AppState>(
     (state) => state.user.data
   ) as IUsersList[];
+  const message = useSelector<AppState>(
+    (state) => state.user.message
+  ) as string;
 
   useEffect(() => {
     dispatch(userRequest());
@@ -40,7 +45,10 @@ const UsersList = () => {
   };
 
   const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setUserId(0);
+    setShow(false);
+  };
 
   const handleEdit = (id: number) => {
     navigate(`/${id}`);
@@ -53,6 +61,13 @@ const UsersList = () => {
     }
   };
 
+  useEffect(() => {
+    if (message) {
+      setSuccessMessage(message);
+      setTimeout(() => setSuccessMessage(null), 3000);
+    }
+  }, [message, userData]);
+
   return (
     <>
       <Container>
@@ -64,6 +79,7 @@ const UsersList = () => {
             height: "100vh",
           }}
         >
+          {successMessage && <Alert variant="success">{successMessage}</Alert>}
           <Card
             style={{
               width: "56rem",

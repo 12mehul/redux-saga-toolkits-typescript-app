@@ -1,7 +1,13 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { singleUserService, userService } from "../services/userService";
+import {
+  singleUserDelService,
+  singleUserService,
+  userService,
+} from "../services/userService";
 import { IUsersList } from "../types/IUsersList";
 import {
+  singleUserDelRequest,
+  singleUserDelSuccess,
   singleUserRequest,
   singleUserSuccess,
   userFailure,
@@ -28,10 +34,24 @@ function* singleUserSaga(action: PayloadAction<number>) {
   }
 }
 
+function* singleUserDelSaga(action: PayloadAction<number>) {
+  try {
+    yield call(singleUserDelService, action.payload);
+    yield put(singleUserDelSuccess("User Deleted Successfully!"));
+    yield put(userRequest()); // Refresh users
+  } catch (error) {
+    yield put(userFailure(error));
+  }
+}
+
 export function* watcherUserList() {
   yield takeEvery(userRequest().type, userSaga);
 }
 
 export function* watcherSingleUserList() {
   yield takeEvery(singleUserRequest, singleUserSaga);
+}
+
+export function* watcherSingleUserDel() {
+  yield takeEvery(singleUserDelRequest, singleUserDelSaga);
 }

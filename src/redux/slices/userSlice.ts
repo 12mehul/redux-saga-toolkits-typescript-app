@@ -7,6 +7,8 @@ interface IUserInitial {
   userDetails: IUsersList | null;
   error: string | null;
   userId: number;
+  delLoader: boolean;
+  message: string;
 }
 const initialState: IUserInitial = {
   loading: false,
@@ -14,6 +16,8 @@ const initialState: IUserInitial = {
   userDetails: null,
   error: null,
   userId: 0,
+  delLoader: false,
+  message: "",
 };
 
 const userSlice = createSlice({
@@ -41,6 +45,21 @@ const userSlice = createSlice({
       state.userDetails = action.payload;
     },
 
+    singleUserDelRequest: (
+      state: IUserInitial,
+      action: PayloadAction<number>
+    ) => {
+      state.delLoader = true;
+      state.userId = action.payload;
+    },
+    singleUserDelSuccess: (
+      state: IUserInitial,
+      action: PayloadAction<string>
+    ) => {
+      state.delLoader = false;
+      state.message = action.payload;
+    },
+
     userFailure: (state: IUserInitial, action: PayloadAction<any>) => {
       state.loading = false;
       state.error = action.payload;
@@ -54,6 +73,8 @@ export const {
   userFailure,
   singleUserRequest,
   singleUserSuccess,
+  singleUserDelRequest,
+  singleUserDelSuccess,
 } = userSlice.actions;
 
 export default userSlice.reducer;
